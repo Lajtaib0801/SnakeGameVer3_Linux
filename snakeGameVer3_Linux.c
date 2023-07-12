@@ -12,92 +12,92 @@ void move_snake(char* map, char dir, int* row, int* col);
 void draw(char* map, int row, int col);
 void fill(char* map);
 char _getch(void);
-
+void end_game(void);
 
 int main(void)
 {
 
-	char* map = malloc((ROWS * COLS) * sizeof(char));
+    char* map = malloc((ROWS * COLS) * sizeof(char));
 
-	fill(map);
-
-	
-	int curr_r = 10;
-	int curr_c = 10;
-	char direction = '\0';
-	do 
-	{
-		draw(map, curr_r, curr_c);
-		direction = _getch();
-		move_snake(map, direction, &curr_r, &curr_c);
-		
-
-	} while (direction != 'q');
+    fill(map);
 
 
-	free(map);
-	return 0;
+    int curr_r = 10;
+    int curr_c = 10;
+    char direction = '\0';
+    do 
+    {
+        draw(map, curr_r, curr_c);
+        direction = _getch();
+        move_snake(map, direction, &curr_r, &curr_c);
+
+
+    } while (direction != 'q');
+
+
+    free(map);
+    return 0;
 }
 
 
 void fill(char* map)
 {
-	for (int i = 0; i < ROWS; i++)
-	{
-		for (int j = 0; j < COLS; j++)
-		{
-			if (i == 0 || j == 0 || i == ROWS - 1 || j == COLS - 1)
-				map[i * COLS + j] = '1';
-			else
-				map[i * COLS + j] = ' ';
-		}
-	}
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLS; j++)
+        {
+            if (i == 0 || j == 0 || i == ROWS - 1 || j == COLS - 1)
+                map[i * COLS + j] = '1';
+            else
+                map[i * COLS + j] = ' ';
+        }
+    }
 }
 void move_snake(char* map, char dir, int* row, int* col)
 {
-	if (dir == 'w')
-	{
-		if (*row == 1)
-			exit(0);
-		map[(*row) * COLS + (*col)] = ' ';
-		(*row)--;
-	}
-	else if (dir == 'a')
-	{	
-		if (*col == 1)
-			exit(0);
-		map[(*row) * COLS + (*col)] = ' ';
-		(*col)--;
-	}
-	else if (dir == 's')
-	{	
-		if (*row == ROWS-2)
-			exit(0);
-		map[(*row) * COLS + (*col)] = ' ';
-		(*row)++;
-	}
-	else if (dir == 'd')
-	{	
-		if (*col == COLS-2)
-			exit(0);
-		map[(*row) * COLS + (*col)] = ' ';
-		(*col)++;
-	}
+    if (dir == 'w')
+    {
+        if (*row == 1)
+            end_game();
+        map[(*row) * COLS + (*col)] = ' ';
+        (*row)--;
+    }
+    else if (dir == 'a')
+    {	
+        if (*col == 1)
+            end_game();
+        map[(*row) * COLS + (*col)] = ' ';
+        (*col)--;
+    }
+    else if (dir == 's')
+    {	
+        if (*row == ROWS-2)
+            end_game();
+        map[(*row) * COLS + (*col)] = ' ';
+        (*row)++;
+    }
+    else if (dir == 'd')
+    {	
+        if (*col == COLS-2)
+            end_game();
+        map[(*row) * COLS + (*col)] = ' ';
+        (*col)++;
+    }
 }
 void draw(char* map, int row, int col)
 {
-	printf("\033[H\033[J");
-	map[row * COLS + col] = '#';
-	for (int i = 0; i < ROWS; i++)
-	{
-		printf("\t\t");
-		for (int j = 0; j < COLS; j++)
-		{
-			printf("%c", map[i * COLS + j]);
+    printf("\033[H\033[J");
+    map[row * COLS + col] = '#';
+    for (int i = 0; i < ROWS; i++)
+    {
+        printf("\t\t");
+        for (int j = 0; j < COLS; j++)
+        {
+            printf("%c", map[i * COLS + j]);
 
-		}
-		printf("\n");
-	}
+        }
+        printf("\n");
+    }
 }
 
 
@@ -122,9 +122,14 @@ char _getch(void)
         perror("tcsetattr ~ICANON");
     //printf("%c\n", buf);
     return buf;
- }
+}
 
-
+void end_game(void)
+{
+    printf("\033[H\033[J");
+    printf("GAME OVER\n");
+    exit(0);
+}
 
 
 

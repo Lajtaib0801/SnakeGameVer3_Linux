@@ -14,7 +14,7 @@
 void move_snake(char* map, char dir, int* row, int* col, int* fruit_coords);
 void draw(char* map, int row, int col);
 void fill(char* map);
-void place_fruit(char* map, int* fruit_coords, int* row, int* col);
+void place_fruit(char* map, int* fruit_coords, int row, int col);
 char _getch(void);
 void end_game(void);
 
@@ -31,7 +31,7 @@ int main(void)
 {
 
     char* map = malloc((ROWS * COLS) * sizeof(char));
-    int len = 1;
+    //int len = 1;
     //piece* pieces = (piece*)malloc(len * sizeof(piece));
 
 
@@ -44,7 +44,7 @@ int main(void)
     char direction = '\0';
     int* fruit_coords = (int*)malloc(2 * sizeof(int));
 
-    place_fruit(map, fruit_coords, &curr_r, &curr_c);
+    place_fruit(map, fruit_coords, curr_r, curr_c);
     do
     {
         draw(map, curr_r, curr_c);
@@ -53,8 +53,8 @@ int main(void)
 
 
     } while (direction != 'q');
-    
-    
+
+
     free(fruit_coords);
     //free(pieces);
     free(map);
@@ -77,37 +77,37 @@ void fill(char* map)
 }
 void move_snake(char* map, char dir, int* row, int* col, int* fruit_coords)
 {
-	
-	switch(dir)
-	{
-		case 'w':
-			if (*row == 1)
+
+    switch (dir)
+    {
+    case 'w':
+        if (*row == 1)
             end_game();
-			map[(*row) * COLS + (*col)] = ' ';
-			(*row)--;
-			break;
-		case 'a':
-			if (*col == 1)
+        map[(*row) * COLS + (*col)] = ' ';
+        (*row)--;
+        break;
+    case 'a':
+        if (*col == 1)
             end_game();
-			map[(*row) * COLS + (*col)] = ' ';
-			(*col)--;
-			break;
-		case 's':
-			if (*row == ROWS - 2)
+        map[(*row) * COLS + (*col)] = ' ';
+        (*col)--;
+        break;
+    case 's':
+        if (*row == ROWS - 2)
             end_game();
-			map[(*row) * COLS + (*col)] = ' ';
-			(*row)++;
-			break;
-		case 'd':
-			if (*col == COLS - 2)
+        map[(*row) * COLS + (*col)] = ' ';
+        (*row)++;
+        break;
+    case 'd':
+        if (*col == COLS - 2)
             end_game();
-			map[(*row) * COLS + (*col)] = ' ';
-			(*col)++;
-			break;
-		
-	}
+        map[(*row) * COLS + (*col)] = ' ';
+        (*col)++;
+        break;
+
+    }
     if (*row == *fruit_coords && *col == *(fruit_coords + 1))
-        place_fruit(map, fruit_coords, row, col);
+        place_fruit(map, fruit_coords, *row, *col);
 }
 void draw(char* map, int row, int col)
 {
@@ -153,12 +153,12 @@ void end_game(void)
     exit(0);
 }
 
-void place_fruit(char* map, int* fruit_coords, int* row, int* col)
+void place_fruit(char* map, int* fruit_coords, int row, int col)
 {
     srand(time(NULL));
     *fruit_coords = rand() % (ROWS - 3) + 2;
     *(fruit_coords + 1) = rand() % (COLS - 3) + 2;
-    if (*row == *fruit_coords && *col == *(fruit_coords + 1))
+    if (row == *fruit_coords && col == *(fruit_coords + 1))
         place_fruit(map, fruit_coords, row, col);
 
     map[*fruit_coords * COLS + * (fruit_coords + 1)] = 'O';
